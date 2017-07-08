@@ -36,7 +36,18 @@
     group: root
     mode: 0644
   notify: restart apache
-  when: apache_create_vhosts
+  when: apache_create_vhosts and apache_split_vhosts == false
+
+- name: Add apache vhosts configuration in one file per vhost
+  template:
+    src: "{{ apache_vhosts_single_template }}"
+    dest: "{{ apache_conf_path }}/sites-available/{{ item.vhostsprefix }}_{{ apache_vhosts_filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart apache
+  with_items: "{{ apache_vhosts }}"
+  when: apache_create_vhosts and apache_split_vhosts
 
 - name: Add vhost symlink in sites-enabled.
   file:
@@ -44,7 +55,17 @@
     dest: "{{ apache_conf_path }}/sites-enabled/{{ apache_vhosts_filename }}"
     state: link
   notify: restart apache
-  when: apache_create_vhosts
+  when: apache_create_vhosts and apache_split_vhosts == false
+
+- name: Add vhost symlink in sites-enabled.
+  file:
+    src: "{{ apache_conf_path }}/sites-available/{{ item.vhostsprefix }}_{{ apache_vhosts_filename }}"
+    dest: "{{ apache_conf_path }}/sites-enabled/{{ item.vhostsprefix }}_{{ apache_vhosts_filename }}"
+    state: link
+  notify: restart apache
+  with_items: "{{apache_vhosts}}"
+  when: apache_create_vhosts and apache_split_vhosts
+
 
 - name: Remove default vhost in sites-enabled.
   file:
@@ -52,3 +73,10 @@
     state: absent
   notify: restart apache
   when: apache_remove_default_vhost
+
+- name: set umask for www-data
+  lineinfile:
+    path: "{{ apache_conf_path }}/envvars"
+    regexp: "^umask"
+    line: "umask 002"
+  notify: restart apache

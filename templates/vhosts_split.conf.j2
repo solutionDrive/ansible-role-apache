@@ -1,0 +1,93 @@
+{{ apache_global_vhost_settings }}
+
+{# Set up VirtualHosts #}
+<VirtualHost {{ apache_listen_ip }}:{{ apache_listen_port }}>
+  ServerName {{ item.servername }}
+{% if item.serveralias is defined %}
+  ServerAlias {{ item.serveralias }}
+{% endif %}
+
+
+{% if item.virtual_subdir is defined %}
+    DocumentRoot /dev/null
+    Alias "{{ item.virtual_subdir }}" "{{ item.documentroot }}"
+{% else %}
+    {% if item.documentroot is defined %}
+      DocumentRoot {{ item.documentroot }}
+    {% endif %}
+{% endif %}
+
+{% if item.serveradmin is defined %}
+  ServerAdmin {{ item.serveradmin }}
+{% endif %}
+{% if item.documentroot is defined %}
+  <Directory "{{ item.documentroot }}">
+    AllowOverride {{ item.allow_override | default(apache_allow_override) }}
+    Options {{ item.options | default(apache_options) }}
+{% if apache_vhosts_version == "2.2" %}
+    Order allow,deny
+    Allow from all
+{% else %}
+    Require all granted
+{% endif %}
+  </Directory>
+{% endif %}
+{% if item.extra_parameters is defined %}
+  {{ item.extra_parameters }}
+{% endif %}
+</VirtualHost>
+
+{# Set up SSL VirtualHosts #}
+{% if apache_ignore_missing_ssl_certificate %}
+<VirtualHost {{ apache_listen_ip }}:{{ apache_listen_port_ssl }}>
+  ServerName {{ item.servername }}
+{% if item.serveralias is defined %}
+  ServerAlias {{ item.serveralias }}
+{% endif %}
+{% if item.documentroot is defined %}
+  DocumentRoot {{ item.documentroot }}
+{% endif %}
+
+  SSLEngine on
+  SSLCipherSuite {{ apache_ssl_cipher_suite }}
+  SSLProtocol {{ apache_ssl_protocol }}
+  SSLHonorCipherOrder On
+{% if apache_vhosts_version == "2.4" %}
+  SSLCompression off
+{% endif %}
+  SSLCertificateFile {{ item.certificate_file }}
+  SSLCertificateKeyFile {{ item.certificate_key_file }}
+{% if item.certificate_chain_file is defined %}
+  SSLCertificateChainFile {{ item.certificate_chain_file }}
+{% endif %}
+
+{% if item.serveradmin is defined %}
+  ServerAdmin {{ item.serveradmin }}
+{% endif %}
+{% if item.documentroot is defined %}
+  <Directory "{{ item.documentroot }}">
+    AllowOverride {{ item.allow_override | default(apache_allow_override) }}
+    Options {{ item.options | default(apache_options) }}
+{% if apache_vhosts_version == "2.2" %}
+    Order allow,deny
+    Allow from all
+{% else %}
+    Require all granted
+{% endif %}
+  </Directory>
+{% endif %}
+{% if item.extra_parameters is defined %}
+  {{ item.extra_parameters }}
+{% endif %}
+</VirtualHost>
+
+{% endif %}
+
+
+<Location />
+    AuthUserFile /var/www/passwd
+    AuthType Basic
+    AuthName "My Private Stuff"
+    Require expr %{REQUEST_URI} =~ m#^/.well-known/acme-challenge/#
+    Require valid-user
+</Location>
