@@ -8,6 +8,7 @@ apache_conf_path: /etc/apache2
 __apache_packages:
   - apache2
   - apache2-utils
+  - python-letsencrypt-apache
 
 apache_ports_configuration_items:
   - regexp: "^Listen "
