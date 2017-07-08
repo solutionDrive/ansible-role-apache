@@ -8,7 +8,6 @@
     apache_vhosts:
       - servername: "example.com"
         documentroot: "/var/www/vhosts/example_com"
-    certbot_install_from_source: true
     certbot_vhosts:
       - domain: "example.com"
         email: "johndoe@examle.com"
@@ -28,6 +27,5 @@
       when: ansible_os_family == 'Debian'
 
   roles:
-    - geerlingguy.git
     - geerlingguy.certbot
     - role_under_test
