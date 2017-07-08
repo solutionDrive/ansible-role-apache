@@ -1,4 +1,14 @@
 ---
+- name: verify ansible version meets version requirements of role
+  assert:
+    that: "ansible_version.full | version_compare('2.3', '>=')"
+    msg: >
+      "You must update ansible to at least 2.3 to use this role"
+
+- name: set timezone to Europe/Berlin
+  timezone:
+    name: Europe/Berlin
+
 # Include variables and define needed variables.
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
@@ -16,7 +26,7 @@
 - name: Get installed version of Apache.
   shell: "{{ apache_daemon_path }}{{ apache_daemon }} -v"
   changed_when: false
-  always_run: yes
+  check_mode: no
   register: _apache_version
 
 - name: Create apache_version variable.
@@ -28,6 +38,9 @@
 
 - include_vars: apache-24.yml
   when: "apache_version.split('.')[1] == '4'"
+
+- include: certs.yml
+  with_items: "{{ certbot_vhosts }}"
 
 # Configure Apache.
 - include: "configure-{{ ansible_os_family }}.yml"

@@ -1,5 +1,15 @@
 # Ansible Role: Apache 2.x
 
+## Disclaimer
+This is a fork of the geerlingguy.apache role with little tweaks for our use-cases.
+Theses tweaks are only tested on Debian-Systems.
+
+These tweaks are:
+- store each vhost-config in its own file, since letsencrypt can't handle multiple vhosts in one file
+- generating letsencrypt certs before generating the vhost-configs
+- dependency to geerlingguy.certbot (has to be applied in playbook before this role is applied)
+
+
 [![Build Status](https://travis-ci.org/geerlingguy/ansible-role-apache.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-apache)
 
 An Ansible Role that installs Apache 2.x on RHEL/CentOS, Debian/Ubuntu, SLES and Solaris.
@@ -152,4 +162,4 @@ MIT / BSD
 
 ## Author Information
 
-This role was created in 2014 by [Jeff Geerling](https://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).
+This role was created in 2014 by [Jeff Geerling](http://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).
