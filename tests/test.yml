@@ -11,7 +11,7 @@
     certbot_install_from_source: true
     certbot_vhosts:
       - domain: "example.com"
-      - email: "johndoe@examle.com"
+        email: "johndoe@examle.com"
 
   pre_tasks:
     - name: Update apt cache.
