@@ -10,4 +10,5 @@
         documentroot: "/var/www/vhosts/example_com"
 
   roles:
+    - geerlingguy.certbot
     - role_under_test
