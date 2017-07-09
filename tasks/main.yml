@@ -5,10 +5,6 @@
     msg: >
       "You must update ansible to at least 2.3 to use this role"
 
-- name: set timezone to Europe/Berlin
-  timezone:
-    name: Europe/Berlin
-
 # Include variables and define needed variables.
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
