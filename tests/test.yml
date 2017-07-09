@@ -8,29 +8,6 @@
     apache_vhosts:
       - servername: "example.com"
         documentroot: "/var/www/vhosts/example_com"
-    certbot_vhosts:
-      - domain: "example.com"
-        email: "johndoe@examle.com"
-
-  pre_tasks:
-    - name: Update apt cache.
-      apt: update_cache=yes cache_valid_time=600
-      when: ansible_os_family == 'Debian'
-      changed_when: false
-
-    - name: Install cron (RedHat).
-      yum: name=item.name state=present
-      when: ansible_os_family == 'RedHat'
-      with_items:
-        - cronie
-        - epel-release
-        - mod_ssl
-        - python-certbot-apache
-
-    - name: Install cron (Debian).
-      apt: name=cron state=present
-      when: ansible_os_family == 'Debian'
 
   roles:
-    - geerlingguy.certbot
     - role_under_test
