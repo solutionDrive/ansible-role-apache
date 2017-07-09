@@ -39,9 +39,6 @@
 - include_vars: apache-24.yml
   when: "apache_version.split('.')[1] == '4'"
 
-- include: certs.yml
-  with_items: "{{ certbot_vhosts }}"
-
 # Configure Apache.
 - include: "configure-{{ ansible_os_family }}.yml"
   static: no
