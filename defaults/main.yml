@@ -59,4 +59,4 @@ apache_restart_state: restarted
 # you want to upgrade or switch versions using a new repo.
 apache_packages_state: installed
 
-apache_split_vhosts: true
+apache_split_vhosts: false
