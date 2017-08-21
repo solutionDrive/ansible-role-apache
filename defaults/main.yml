@@ -19,7 +19,7 @@ apache_global_vhost_settings: |
 
 apache_vhosts:
   # Additional properties:
-  # 'serveradmin, serveralias, allow_override, options, extra_parameters'.
+  # 'serveradmin, serveraliasse, allow_override, options, extra_parameters'.
   - servername: "local.dev"
     documentroot: "/var/www/html"
     vhostfile: ""
@@ -29,7 +29,7 @@ apache_options: "-Indexes +FollowSymLinks"
 
 apache_vhosts_ssl: []
   # Additional properties:
-  # 'serveradmin, serveralias, allow_override, options, extra_parameters'.
+  # 'serveradmin, serveraliasse, allow_override, options, extra_parameters'.
   # - servername: "local.dev",
   #   documentroot: "/var/www/html",
   #   certificate_file: "/path/to/certificate.crt",
