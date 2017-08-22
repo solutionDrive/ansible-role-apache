@@ -3,8 +3,8 @@
 {# Set up VirtualHosts #}
 <VirtualHost {{ apache_listen_ip }}:{{ apache_listen_port }}>
   ServerName {{ item.servername }}
-{% if item.serveralias is defined %}
-  ServerAlias {{ item.serveralias }}
+{% if item.serveraliasse is defined %}
+  ServerAlias{% for alias in item.serveraliasse %} {{ alias }}{% endfor %}
 {% endif %}
 
 
@@ -41,9 +41,10 @@
 {% if apache_ignore_missing_ssl_certificate %}
 <VirtualHost {{ apache_listen_ip }}:{{ apache_listen_port_ssl }}>
   ServerName {{ item.servername }}
-{% if item.serveralias is defined %}
-  ServerAlias {{ item.serveralias }}
+{% if item.serveraliasse is defined %}
+  ServerAlias{% for alias in item.serveraliasse %} {{ alias }}{% endfor %}
 {% endif %}
+
 {% if item.documentroot is defined %}
   DocumentRoot {{ item.documentroot }}
 {% endif %}
