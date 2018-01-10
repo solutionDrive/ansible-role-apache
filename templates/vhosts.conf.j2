@@ -9,7 +9,14 @@
 {% endif %}
 
 {% if vhost.documentroot is defined %}
-  DocumentRoot {{ vhost.documentroot }}
+  {% if vhost.virtual_subdir is defined %}
+      DocumentRoot /dev/null
+      Alias "{{ vhost.virtual_subdir }}" "{{ vhost.documentroot }}"
+  {% else %}
+      {% if vhost.documentroot is defined %}
+        DocumentRoot {{ vhost.documentroot }}
+      {% endif %}
+  {% endif %}
 {% endif %}
 
 {% if vhost.serveradmin is defined %}
