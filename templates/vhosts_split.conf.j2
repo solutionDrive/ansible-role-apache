@@ -45,8 +45,13 @@
   ServerAlias{% for alias in item.serveraliasse %} {{ alias }}{% endfor %}
 {% endif %}
 
-{% if item.documentroot is defined %}
-  DocumentRoot {{ item.documentroot }}
+{% if vhost.virtual_subdir is defined %}
+  DocumentRoot /dev/null
+  Alias "{{ vhost.virtual_subdir }}" "{{ vhost.documentroot }}"
+{% else %}
+  {% if vhost.documentroot is defined %}
+    DocumentRoot {{ vhost.documentroot }}
+  {% endif %}
 {% endif %}
 
   SSLEngine on
